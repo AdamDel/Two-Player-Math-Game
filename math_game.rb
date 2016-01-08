@@ -1,3 +1,4 @@
+require 'colorize'
 @player_one = {
       id: 1,
       lives: 3,
@@ -20,7 +21,7 @@ game_is_done= false
     puts "PLAYER 2 : #{@player_two[:lives]} lives ---- #{@player_two[:points]} points"
     first_number = random_number
     second_number = random_number
-    puts "Player #{@current_player_id}, What does #{first_number} plus #{second_number} equal?"
+    puts "Player #{@current_player_id}, What does #{first_number} plus #{second_number} equal?".colorize(:background => :magenta)
     answer = gets.chomp.to_i
     check_answer(answer, first_number, second_number, @current_player_id)
     winner?
@@ -33,10 +34,10 @@ end
 def winner?
 #Checks whether a one of two players have won
 if @player_one[:lives] == 0
-    puts "PLAYER 2 WINS! ! !"
+    puts "PLAYER 2 WINS! ! !".colorize(:magenta)
   end
    if @player_two[:lives] == 0
-    puts "PLAYER 1 WINS! ! !"
+    puts "PLAYER 1 WINS! ! !".colorize(:magenta)
   end
 end
 
@@ -49,11 +50,11 @@ def check_answer(answer, num1, num2, current_player_id)
 #Checks if the answer to the addidion is correct or wrong and notifies the player
   if answer == num1 + num2
       add_point(current_player_id)
-      puts "CORRECT!"
+      puts "CORRECT!".colorize(:green)
       return true
     else
       subtract_life(current_player_id)
-      puts "WRONG!"
+      puts "WRONG!".colorize(:red)
       return false
     end
 end
