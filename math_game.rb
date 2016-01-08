@@ -9,8 +9,25 @@
       points: 0
 }
 
+@current_player_id = 1 
+
 def initiate_game
 #Called in order to initiate the game state and keep game alive until a player has zero lives
+game_is_done= false
+  @player_switch = 0
+  while true 
+    puts "PLAYER 1 : #{@player_one[:lives]} lives ---- #{@player_one[:points]} points"
+    puts "PLAYER 2 : #{@player_two[:lives]} lives ---- #{@player_two[:points]} points"
+    first_number = random_number
+    second_number = random_number
+    puts "Player #{@current_player_id}, What does #{first_number} plus #{second_number} equal?"
+    answer = gets.chomp.to_i
+    check_answer(answer, first_number, second_number, @current_player_id)
+    winner?
+    break if game_over?(@player_one,@player_two)
+    @player_switch += 1
+    @current_player_id = (@player_switch % 2) + 1
+  end
 end
 
 def winner?
