@@ -14,17 +14,38 @@ class Player
   def subtract_life
     self.lives -= 1
   end
+
+end
+
+class NonNumericAnswer < StandardError  
+end
+
+class NotValidPlayerName < StandardError
 end
 
 
 def start_game
   puts "Welcome To The Math Game ! ! !"
-  print "PLAYER ONE: ENTER YOUR NAME > "
-  player_one_name = gets.chomp
+  begin
+    print "PLAYER ONE: ENTER YOUR NAME > "
+    player_one_name = gets.chomp
+    raise NotValidPlayerName, 'Argument is not a proper name' unless player_one_name.match(/^[a-zA-Z]+$/)
+  rescue NotValidPlayerName => e
+    puts "THIS IS NOT A VALID NAME. PLEASE TRY AGAIN....".colorize(:red)
+    retry
+  end
   puts ""
-  print "PLAYER TWO: ENTER YOUR NAME > "
-  player_two_name = gets.chomp
+  begin
+    print "PLAYER TWO: ENTER YOUR NAME > "
+    player_two_name = gets.chomp
+    raise NotValidPlayerName, 'Argument is not a proper name' unless player_two_name.match(/^[a-zA-Z]+$/)
+  rescue NotValidPlayerName => e
+    puts "THIS IS NOT A VALID NAME. PLEASE TRY AGAIN....".colorize(:red)
+    retry
+  end
+
   puts ""
+
   @player_one = Player.new(player_one_name)
   @player_two = Player.new(player_two_name)
   @current_player = @player_one
@@ -34,14 +55,24 @@ def start_game
     puts "#{@current_player.name}: POINTS -> #{@current_player.points}    LIVES: #{@current_player.lives}"
     first_number = random_number
     second_number = random_number
-    puts "#{@current_player.name}, What does #{first_number} plus #{second_number} equal?"
-    answer = gets.chomp.to_i
+    
+    begin
+      puts "#{@current_player.name}, What does #{first_number} plus #{second_number} equal?"
+      answer = gets.chomp
+      raise NonNumericAnswer, 'Argument is not numeric' unless answer.match(/^\d+$/)
+    rescue NonNumericAnswer => e
+      puts "NOT A VALID NUMERIC ANSWER. PLEASE TRY AGAIN".colorize(:red)
+      retry
+    end
+
     check_answer(answer, first_number, second_number, @current_player)
     winner?
     break if @player_one.lives == 0 || @player_two.lives == 0
     @current_player == @player_one ? @current_player = @player_two : @current_player = @player_one
   end
 end
+
+
 
 def winner?
   if @player_one.lives == 0
@@ -53,7 +84,9 @@ def winner?
 end
 def check_answer(answer, num1, num2, player)
 #Checks if the answer to the addidion is correct or wrong and notifies the player
-  if answer == num1 + num2
+ 
+  
+  if answer.to_i == num1 + num2
       player.add_point
       puts "CORRECT!".colorize(:green)
     else

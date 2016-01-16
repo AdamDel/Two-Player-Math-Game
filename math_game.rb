@@ -14,7 +14,6 @@ require 'colorize'
 
 def initiate_game
 #Called in order to initiate the game state and keep game alive until a player has zero lives
-game_is_done= false
   @player_switch = 0
   while true 
     puts "PLAYER 1 : #{@player_one[:lives]} lives ---- #{@player_one[:points]} points"
